@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Controlling Led Via WebPage</title>
+
+</head>
+
+<body>
+	<header>
+		<h1>Control LED from Web Interface</h1>
+		<h2>Publishing from web to control a LED</h2>
+	</header>
+
+	<section id="main" role="main">
+			<button id = "ON">LED on!</button>
+			<button id = "OFF">LED Off!</button>
+	</section>
+
+
+	<!-- including the latest PubNub JavaScript SDK -->
+	<script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
+	<script>
+(function() {
+
+	// DOM
+	var buttonON = document.querySelector('#ON')
+	var buttonOFF = document.querySelector('#OFF'); 
+
+	// This is the channel name you are subscribing in remote-led.py
+	var channel = 'disco';
+
+	// Init - Get your own keys at admin.pubnub.com
+	var p = PUBNUB.init({
+		subscribe_key: 'sub-c-f762fb78-2724-11e4-a4df-02ee2ddab7fe',
+		publish_key:   'pub-c-156a6d5f-22bd-4a13-848d-b5b4d4b36695'
+	});
+
+	// Sending data
+	function disco() {
+    p.publish({
+      channel : channel, 
+      message : {led: 1}
+    });
+  }
+
+     //Sending Off Command
+function LEDOFF() {
+	p.publish({
+	channel : channel,
+	message : {led: 2}
+});
+}
+
+    // Click event
+	buttonON.addEventListener('click', disco);
+	buttonOFF.addEventListener('click',LEDOFF);
+
+})();
+	</script>
+	
+</body>
+</html>
